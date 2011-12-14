@@ -3,8 +3,8 @@
 # function definitions #
 
 setup() {
-    # pg_mirror="http://ftp.postgresql.org/pub/source"
-    pg_mirror="ftp://172.28.173.1/software/PostgreSQL"
+    pg_mirror="http://ftp.postgresql.org/pub/source"
+    # pg_mirror="ftp://172.28.173.1/software/PostgreSQL"
     destination="/opt/pgbrew"
     http_fetcher="$( pick_first_existing wget curl )"
     make_program="$( pick_first_existing gmake make )"
