@@ -123,7 +123,7 @@ choose_version() {
         exit
     fi
     echo "Chosen version = $chosen_version"
-    prefix="${destination}/${chosen_version//\./}"
+    prefix="${destination}/${chosen_version}"
 }
 
 get_sources() {
