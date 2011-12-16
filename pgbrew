@@ -50,9 +50,7 @@ http_get() {
 get_available_versions() {
     pg_versions=( $(
         http_get http://www.postgresql.org/ftp/source/ | \
-        sed 's/</\n</g' | \
-        egrep '^<a href="(v[0-9]+\.[0-9]+\.[0-9]+)">\1$' | \
-        cut -d\> -f2
+        perl -lne 'print for /<a href="(v[0-9]+\.[0-9]+\.[0-9]+)">\1</g'
         ) )
 }
 
