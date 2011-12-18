@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # function definitions #
 
 setup() {
@@ -10,13 +9,13 @@ setup() {
     make_program="$( pick_first_existing gmake make )"
     if [[ $( uname -s ) == "SunOS" ]]
     then
-        special_configure_options=( '--enable-dtrace' 'DTRACEFLAGS=-64' 'CC=cc' 'CFLAGS=-xO3 -m64' 'LDFLAGS= -m64 -L/opt/omni/lib/amd64 -R/opt/omni/lib/amd64' 'CPPFLAGS=-I/opt/omni/include/libxml2 -I/opt/omni/include ' )
         export CC="cc -Xa"
-        export CPPFLAGS="-I/opt/omni/include/libxml2 -I/opt/omni/include -I/opt/omni/include/libxml2"
+        export CPPFLAGS="-I/opt/omni/include/libxml2 -I/opt/omni/include -I/opt/omni/include/libxml2 -I/usr/sfw/include"
         export CFLAGS="-xO3 -m64 -g"
         export CFLAGS_SL="-KPIC"
-        export LDFLAGS="-m64 -L/opt/omni/lib/amd64 -R/opt/omni/lib/amd64 -L/opt/omni/lib/amd64 -Wl,-R'/opt/pgsql911/lib'"
+        export LDFLAGS="-m64 -L/opt/omni/lib/amd64 -R/opt/omni/lib/amd64 -L/usr/sfw/lib/amd64 -R/usr/sfw/lib/amd64 -Wl,-R'/opt/pgsql911/lib'"
         export LIBS="-lxml2 -lssl -lcrypto -lz -lreadline -ltermcap -lnsl -lrt -lsocket -lm"
+        special_configure_options=( '--enable-dtrace' 'DTRACEFLAGS=-64' 'CC=cc' 'CFLAGS=-xO3 -m64' "LDFLAGS=$LDFLAGS" "CPPFLAGS=$CPPFLAGS" )
         export PATH="/sbin:/usr/sbin:/usr/local/sbin:/usr/gnu/bin:/opt/omni/bin:/opt/OMNIperl/bin:/usr/openwin/bin:/usr/perl5/5.8.4/bin:/usr/X11/bin:/usr/dt/bin:/usr/sfw/bin:/usr/ccs/bin:/usr/xpg4/bin:/usr/xpg6/bin:/usr/proc/bin:/usr/SUNWale/bin:/usr/sadm/sysadm/bin:/usr/sadm/bin:/usr/sadm/install/bin:/usr/local/bin:/usr/bin:/bin"
     fi
 }
@@ -50,7 +49,9 @@ http_get() {
 get_available_versions() {
     pg_versions=( $(
         http_get http://www.postgresql.org/ftp/source/ | \
-        perl -lne 'print for /<a href="(v[0-9]+\.[0-9]+\.[0-9]+)">\1</g'
+        perl -pe 's/</\n</g' | \
+        perl -ne 'print if /^<a href="(v[0-9]+\.[0-9]+\.[0-9]+)">\1$/' | \
+        cut -d\> -f2
         ) )
 }
 
@@ -143,7 +144,6 @@ configure_sources() {
         --prefix="${prefix}" \
         --with-pgport=$( get_port ) \
         --enable-debug \
-        --with-perl \
         --enable-integer-datetimes \
         --enable-thread-safety \
         --without-krb5 \
