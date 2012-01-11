@@ -51,7 +51,8 @@ get_available_versions() {
         http_get http://www.postgresql.org/ftp/source/ | \
         perl -pe 's/</\n</g' | \
         perl -ne 'print if /^<a href="(v[0-9]+\.[0-9]+\.[0-9]+)">\1$/' | \
-        cut -d\> -f2
+        cut -d\> -f2 |
+        cut -b2-
         ) )
 }
 
@@ -85,10 +86,6 @@ choose_version() {
     printf "  - %s\n" "${pg_versions[@]}"
     read -p "Which one to build? You can specify prefix only to get newest version with this prefix: " -r picked_version
 
-    if [[ "${picked_version:0:1}" != "v" ]]
-    then
-        picked_version="v$picked_version"
-    fi
     if [[ "${picked_version: -1}" == "." ]]
     then
         picked_version="${picked_version:0:-1}"
