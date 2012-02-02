@@ -127,6 +127,10 @@ get_sources() {
     mv "postgresql-${chosen_version}" source
 }
 
+patch_sources() {
+    perl -pi -e "s/^.*?log_line_prefix\s?=\s?'.*?'/log_line_prefix = '%t \[%r\] \[%p\]: \[%l-1\] user=%u,db=%d,e=%e: '/" "$work_dir/source/src/backend/utils/misc/postgresql.conf.sample"
+}
+
 configure_sources() {
     if [[ ! -d "$destination" ]]
     then
@@ -197,6 +201,7 @@ setup
 get_available_versions
 choose_version
 get_sources
+patch_sources
 configure_sources
 compile_sources
 install_binaries
