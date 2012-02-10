@@ -128,7 +128,16 @@ get_sources() {
 }
 
 patch_sources() {
-    perl -pi -e "s/^.*?log_line_prefix\s?=\s?'.*?'/log_line_prefix = '%t \[%r\] \[%p\]: \[%l-1\] user=%u,db=%d,e=%e: '/" "$work_dir/source/src/backend/utils/misc/postgresql.conf.sample"
+    perl -pi -e "
+        s/\A \s* (?: [#] \s* )? listen_addresses \s* = \s* '.*?'/listen_addresses = '*'/x;
+        s/\A \s* (?: [#] \s* )? log_destination s* = \s* '.*?'/log_destination = 'stderr'/x;
+        s/\A \s* (?: [#] \s* )? log_min_duration_statement \s* = \s* -?\d+/log_min_duration_statement = 0/x;
+        s/\A \s* (?: [#] \s* )? log_line_prefix \s* = \s* '.*?'/log_line_prefix = '%t \[%r\] \[%p\]: \[%l-1\] user=%u,db=%d,e=%e: '/x;
+        s/\A \s* (?: [#] \s* )? log_temp_files \s* = \s* \d+/log_temp_files = 0/x;
+        s/\A \s* (?: [#] \s* )? (logging_collector|log_checkpoints|log_connections|log_disconnections|log_lock_waits|archive_mode) \s* = \s* (?: on|off)/\1 = on/x;
+        s/\A \s* (?: [#] \s* )? wal_level \s* = \s* (?: minimal|archive|hot_standby)/wal_level = hot_standby/x;
+        s/\A \s* (?: [#] \s* )? archive_command \s* = \s* '.*?'/archive_command = '\/bin\/true'/x;
+    " "$work_dir/source/src/backend/utils/misc/postgresql.conf.sample"
 }
 
 configure_sources() {
