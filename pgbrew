@@ -131,12 +131,15 @@ patch_sources() {
     perl -pi -e "
         s/\A \s* (?: [#] \s* )? listen_addresses \s* = \s* '.*?'/listen_addresses = '*'/x;
         s/\A \s* (?: [#] \s* )? log_destination s* = \s* '.*?'/log_destination = 'stderr'/x;
-        s/\A \s* (?: [#] \s* )? log_min_duration_statement \s* = \s* -?\d+/log_min_duration_statement = 0/x;
+        s/\A \s* (?: [#] \s* )? (log_min_duration_statement|log_temp_files|log_autovacuum_min_duration) \s* = \s* -?\d+/\1 = 0/x;
         s/\A \s* (?: [#] \s* )? log_line_prefix \s* = \s* '.*?'/log_line_prefix = '%t \[%r\] \[%p\]: \[%l-1\] user=%u,db=%d,e=%e: '/x;
-        s/\A \s* (?: [#] \s* )? log_temp_files \s* = \s* \d+/log_temp_files = 0/x;
         s/\A \s* (?: [#] \s* )? (logging_collector|log_checkpoints|log_connections|log_disconnections|log_lock_waits|archive_mode) \s* = \s* (?: on|off)/\1 = on/x;
         s/\A \s* (?: [#] \s* )? wal_level \s* = \s* (?: minimal|archive|hot_standby)/wal_level = hot_standby/x;
         s/\A \s* (?: [#] \s* )? archive_command \s* = \s* '.*?'/archive_command = '\/bin\/true'/x;
+        s/\A \s* (?: [#] \s* )? (autovacuum_vacuum_threshold|autovacuum_analyze_threshold) \s* = \s* -?\d+/\1 = 500/x;
+        s/\A \s* (?: [#] \s* )? autovacuum_vacuum_scale_factor \s* = \s* \d*\.?\d*/autovacuum_vacuum_scale_factor = 0.1/x;
+        s/\A \s* (?: [#] \s* )? autovacuum_analyze_scale_factor \s* = \s* \d*\.?\d*/autovacuum_analyze_scale_factor = 0.5/x;
+        s/\A \s* (?: [#] \s* )? autovacuum_vacuum_cost_delay \s* = \s* -?\d*\.?\d*(?: ms)?/autovacuum_vacuum_cost_delay = -1/x;
     " "$work_dir/source/src/backend/utils/misc/postgresql.conf.sample"
 }
 
