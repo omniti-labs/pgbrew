@@ -138,7 +138,7 @@ patch_sources() {
         s/\A \s* (?: [#] \s* )? archive_command \s* = \s* '.*?'/archive_command = '\/bin\/true'/x;
         s/\A \s* (?: [#] \s* )? (autovacuum_vacuum_threshold|autovacuum_analyze_threshold) \s* = \s* -?\d+/\1 = 500/x;
         s/\A \s* (?: [#] \s* )? autovacuum_vacuum_scale_factor \s* = \s* \d*\.?\d*/autovacuum_vacuum_scale_factor = 0.1/x;
-        s/\A \s* (?: [#] \s* )? autovacuum_analyze_scale_factor \s* = \s* \d*\.?\d*/autovacuum_analyze_scale_factor = 0.5/x;
+        s/\A \s* (?: [#] \s* )? autovacuum_analyze_scale_factor \s* = \s* \d*\.?\d*/autovacuum_analyze_scale_factor = 0.05/x;
         s/\A \s* (?: [#] \s* )? autovacuum_vacuum_cost_delay \s* = \s* -?\d*\.?\d*(?: ms)?/autovacuum_vacuum_cost_delay = -1/x;
     " "$work_dir/source/src/backend/utils/misc/postgresql.conf.sample"
 }
