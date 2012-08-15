@@ -9,7 +9,7 @@ Simply download and unarchive the file. There will be a single executable in the
 Execute
 -------
 
-pgbrew creates a directory /opt/pgbrew if it doesn't already exist. All servers are installed under this directory. To create ./pgbrew dorectory under /opt sudo will be required. Thus, run the command:
+pgbrew creates a directory /opt/pgbrew if it doesn't already exist. All servers are installed under this directory. To create ./pgbrew directory under /opt sudo will be required. Thus, run the command:
 
 	$ sudo ./pgbrew
 
