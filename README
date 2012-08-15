@@ -1,0 +1,18 @@
+pgBrew
+======
+
+Installation
+------------
+
+Simply download and unarchive the file. There will be a single executable in the unarchived directory 'pgbrew'.
+
+Execute
+-------
+
+pgbrew creates a directory /opt/pgbrew if it doesn't already exist. All servers are installed under this directory. To create ./pgbrew dorectory under /opt sudo will be required. Thus, run the command:
+
+	$ sudo ./pgbrew
+
+All available versions would then be listed, and you will be prompted to enter any one. Enter the complete version name (Eg. 9.1.4 or 8.4.11) to install any version. If you wish to install the latest release, the you need to mention just the major version number, that is, 9 or 8 and pgbrew will install the latest release for you. 
+
+NOTE: pgbrew will only install the server and configure postgresql.conf parameters. Initialization of the server is not handled, and needs to be done by the user.
