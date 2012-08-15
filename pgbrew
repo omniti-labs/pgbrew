@@ -100,6 +100,8 @@ choose_version() {
         if [[ $v == $picked_version ]]
         then
             chosen_version="$picked_version"
+            echo "Chosen version = $chosen_version"
+            prefix="${destination}/${chosen_version}"
             return
         fi
         if [[ $prefix == "${v:0:$prefix_length}" ]]
